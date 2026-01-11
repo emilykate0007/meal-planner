@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: meal-planner-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    disk:
+      name: meal-planner-data
+      mountPath: /opt/render/project/src/server/db
+      sizeGB: 1

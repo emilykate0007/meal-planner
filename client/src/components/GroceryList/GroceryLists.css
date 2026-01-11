@@ -1,0 +1,92 @@
+.grocery-lists {
+  width: 100%;
+}
+
+.grocery-lists h2 {
+  margin: 0 0 2rem 0;
+  color: #2c3e50;
+}
+
+.lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.list-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.list-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.list-content {
+  padding: 1.5rem;
+  cursor: pointer;
+}
+
+.list-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.list-dates {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin: 0 0 1rem 0;
+}
+
+.list-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.list-stats span {
+  color: #34495e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #ecf0f1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #27ae60;
+  transition: width 0.3s;
+}
+
+.delete-list-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-list-button:hover {
+  background: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .lists-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "meal-planner",
+  "version": "1.0.0",
+  "description": "Full-stack meal planning app with recipe management and grocery list generation",
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "cd client && npm run build",
+    "start:server": "cd server && npm start",
+    "start": "npm run start:server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

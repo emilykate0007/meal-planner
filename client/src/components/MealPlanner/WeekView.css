@@ -1,0 +1,236 @@
+/* Week View - Redesigned for Better Screen Fit */
+.week-view {
+  width: 100%;
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Header */
+.week-header {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: var(--space-xl) var(--space-2xl);
+  margin-bottom: 0;
+  position: sticky;
+  top: 77px;
+  z-index: 50;
+}
+
+.week-header h2 {
+  margin: 0 0 var(--space-md) 0;
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.5px;
+}
+
+.week-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.week-range {
+  font-weight: 600;
+  color: var(--gray-800);
+  font-size: 1rem;
+  text-align: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Main Content - Two Column Layout */
+.week-content {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 0;
+  height: calc(100vh - 220px);
+  overflow: hidden;
+}
+
+/* Week Grid - Horizontal Scroll for 7 Days */
+.week-grid {
+  display: flex;
+  gap: 1rem;
+  padding: var(--space-xl);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+}
+
+.week-grid > * {
+  flex: 0 0 340px;
+  scroll-snap-align: start;
+}
+
+.week-grid::-webkit-scrollbar {
+  height: 10px;
+}
+
+.week-grid::-webkit-scrollbar-track {
+  background: rgba(26, 31, 58, 0.3);
+  border-radius: var(--radius-full);
+  margin: 0 var(--space-xl);
+}
+
+.week-grid::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.week-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-300);
+  background-clip: padding-box;
+}
+
+/* Grocery Sidebar - Fixed */
+.grocery-sidebar {
+  border-left: 1px solid var(--glass-border);
+  background: rgba(19, 24, 41, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: 100%;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+}
+
+.grocery-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.grocery-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.grocery-sidebar::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: var(--radius-full);
+}
+
+.grocery-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-300);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1600px) {
+  .week-grid {
+    gap: 0.875rem;
+    padding: var(--space-lg);
+  }
+
+  .week-grid > * {
+    flex: 0 0 320px;
+  }
+
+  .week-content {
+    grid-template-columns: 1fr 320px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .week-header {
+    padding: var(--space-lg) var(--space-xl);
+  }
+
+  .week-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .week-grid {
+    padding: var(--space-lg);
+  }
+
+  .week-grid > * {
+    flex: 0 0 300px;
+  }
+
+  .week-content {
+    grid-template-columns: 1fr 300px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .week-content {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .week-grid {
+    overflow-x: auto;
+    padding: var(--space-lg);
+  }
+
+  .week-grid > * {
+    flex: 0 0 340px;
+  }
+
+  .grocery-sidebar {
+    border-left: none;
+    border-top: 1px solid var(--glass-border);
+    position: static;
+    max-height: 600px;
+    order: 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .week-header {
+    padding: var(--space-md) var(--space-lg);
+    top: 70px;
+  }
+
+  .week-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .week-grid {
+    padding: var(--space-md);
+    gap: 0.75rem;
+  }
+
+  .week-grid > * {
+    flex: 0 0 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .week-header {
+    padding: var(--space-md);
+  }
+
+  .week-controls {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .week-range {
+    width: 100%;
+  }
+
+  .week-grid {
+    padding: var(--space-md);
+  }
+
+  .week-grid > * {
+    flex: 0 0 calc(100vw - 3rem);
+  }
+
+  .grocery-sidebar {
+    max-height: 500px;
+  }
+}

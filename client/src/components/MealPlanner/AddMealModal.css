@@ -1,0 +1,65 @@
+.add-meal-modal {
+  max-width: 600px;
+}
+
+.add-meal-modal h2 {
+  margin: 0 0 1.5rem 0;
+  padding: 1.5rem;
+  padding-bottom: 0;
+  color: #2c3e50;
+}
+
+.add-meal-modal .search-input {
+  margin: 0 1.5rem 1rem 1.5rem;
+  width: calc(100% - 3rem);
+}
+
+.recipe-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.recipe-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #ecf0f1;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.recipe-list-item:hover {
+  background: #f8f9fa;
+}
+
+.recipe-list-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.recipe-info {
+  flex: 1;
+}
+
+.recipe-name {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.recipe-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: #7f8c8d;
+}

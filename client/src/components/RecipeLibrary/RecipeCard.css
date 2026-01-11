@@ -1,0 +1,151 @@
+.recipe-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.5s ease-out;
+  position: relative;
+}
+
+.recipe-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+}
+
+.recipe-image {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+  position: relative;
+}
+
+.recipe-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.recipe-card:hover .recipe-image::before {
+  opacity: 1;
+}
+
+.recipe-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.recipe-card:hover .recipe-image img {
+  transform: scale(1.1);
+}
+
+.recipe-content {
+  padding: var(--space-lg);
+}
+
+.recipe-title {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  font-family: var(--font-heading);
+  line-height: 1.3;
+  transition: color 0.2s ease;
+}
+
+.recipe-card:hover .recipe-title {
+  color: var(--primary);
+}
+
+.rating {
+  color: var(--warning);
+  font-size: 1rem;
+  margin-bottom: var(--space-sm);
+  letter-spacing: 2px;
+}
+
+.recipe-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: 500;
+}
+
+.meal-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  transition: transform 0.2s ease;
+}
+
+.recipe-card:hover .meal-badge {
+  transform: scale(1.05);
+}
+
+.meal-badge.breakfast,
+.meta-item.meal-badge[class*="Breakfast"] {
+  background: var(--breakfast);
+  color: var(--breakfast-border);
+  border: 1.5px solid var(--breakfast-border);
+}
+
+.meal-badge.lunch,
+.meta-item.meal-badge[class*="Lunch"] {
+  background: var(--lunch);
+  color: var(--lunch-border);
+  border: 1.5px solid var(--lunch-border);
+}
+
+.meal-badge.dinner,
+.meta-item.meal-badge[class*="Dinner"] {
+  background: var(--dinner);
+  color: var(--dinner-border);
+  border: 1.5px solid var(--dinner-border);
+}
+
+.recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.tag {
+  background: var(--gray-100);
+  color: var(--gray-700);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid var(--gray-200);
+}
+
+.tag:hover {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
