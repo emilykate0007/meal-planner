@@ -4,12 +4,13 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: cd server && npm install
-    startCommand: cd server && npm start
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
     disk:
       name: meal-planner-data
-      mountPath: /opt/render/project/src/server/db
+      mountPath: /opt/render/project/src/db
       sizeGB: 1
