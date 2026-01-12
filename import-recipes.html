@@ -206,25 +206,19 @@
       try {
         // Read CSV file
         const file = fileInput.files[0];
-        const text = await file.text();
+        let text = await file.text();
 
-        // Parse CSV
-        const lines = text.split('\n');
-        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-
-        statusDiv.textContent = `⏳ Parsing ${lines.length - 1} recipes...`;
-
-        const recipes = [];
-        for (let i = 1; i < lines.length; i++) {
-          if (!lines[i].trim()) continue;
-
-          const values = parseCSVLine(lines[i]);
-          const recipe = {};
-          headers.forEach((header, index) => {
-            recipe[header] = values[index] || '';
-          });
-          recipes.push(recipe);
+        // Remove BOM if present
+        if (text.charCodeAt(0) === 0xFEFF) {
+          text = text.substring(1);
         }
+
+        statusDiv.textContent = '⏳ Parsing CSV...';
+
+        // Properly parse CSV with multi-line quoted fields
+        const recipes = parseProperCSV(text);
+
+        statusDiv.textContent = `⏳ Found ${recipes.length} recipes. Uploading to server...`;
 
         statusDiv.textContent = `⏳ Uploading ${recipes.length} recipes to server...`;
 
@@ -270,6 +264,64 @@
       }
     }
 
+    function parseProperCSV(text) {
+      const lines = [];
+      let current = '';
+      let inQuotes = false;
+
+      // First, split by lines but respect quotes
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const nextChar = text[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && nextChar === '"') {
+            current += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+          current += char;
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+          if (current.trim()) {
+            lines.push(current.trim());
+          }
+          current = '';
+          // Skip \r\n
+          if (char === '\r' && nextChar === '\n') {
+            i++;
+          }
+        } else {
+          current += char;
+        }
+      }
+      if (current.trim()) {
+        lines.push(current.trim());
+      }
+
+      // Parse header
+      const headers = parseCSVLine(lines[0]);
+
+      // Parse data rows
+      const recipes = [];
+      for (let i = 1; i < lines.length; i++) {
+        const values = parseCSVLine(lines[i]);
+        if (values.length === 0 || values.every(v => !v)) continue;
+
+        const recipe = {};
+        headers.forEach((header, index) => {
+          recipe[header] = values[index] || '';
+        });
+
+        // Only add if it has a name
+        if (recipe.Name || recipe['Recipe Name']) {
+          recipes.push(recipe);
+        }
+      }
+
+      return recipes;
+    }
+
     function parseCSVLine(line) {
       const values = [];
       let current = '';
@@ -287,15 +339,15 @@
             inQuotes = !inQuotes;
           }
         } else if (char === ',' && !inQuotes) {
-          values.push(current.trim());
+          values.push(current.replace(/^"|"$/g, '').trim());
           current = '';
         } else {
           current += char;
         }
       }
-      values.push(current.trim());
+      values.push(current.replace(/^"|"$/g, '').trim());
 
-      return values.map(v => v.replace(/^"|"$/g, ''));
+      return values;
     }
   </script>
 </body>
