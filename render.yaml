@@ -6,10 +6,12 @@ services:
     plan: free
     rootDir: server
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 20.11.0
     disk:
       name: meal-planner-data
       mountPath: /opt/render/project/src/db
