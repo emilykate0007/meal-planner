@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete All Recipes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #0A0E27 0%, #131829 100%);
+      color: #E5E7EB;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .container {
+      background: rgba(26, 31, 58, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 3rem;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #EF4444;
+    }
+
+    .warning {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #EF4444;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      font-weight: 600;
+    }
+
+    button {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .cancel {
+      background: rgba(255, 255, 255, 0.1);
+      color: #E5E7EB;
+    }
+
+    .cancel:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: none;
+    }
+
+    .status {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .status.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10B981;
+      display: block;
+    }
+
+    .status.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #EF4444;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚠️ Delete All Recipes</h1>
+
+    <div class="warning">
+      This will permanently delete ALL recipes from your database. This action cannot be undone!
+    </div>
+
+    <button id="deleteBtn" onclick="deleteAllRecipes()">Yes, Delete All Recipes</button>
+    <button class="cancel" onclick="window.close()">Cancel</button>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <script>
+    const API_URL = 'https://meal-planner-lupl.onrender.com/api';
+
+    async function deleteAllRecipes() {
+      const btn = document.getElementById('deleteBtn');
+      const statusDiv = document.getElementById('status');
+
+      if (!confirm('Are you ABSOLUTELY SURE? This will delete all recipes permanently!')) {
+        return;
+      }
+
+      btn.disabled = true;
+      statusDiv.className = 'status';
+      statusDiv.style.display = 'block';
+      statusDiv.textContent = '⏳ Deleting all recipes...';
+
+      try {
+        const response = await fetch(`${API_URL}/import/recipes/all`, {
+          method: 'DELETE',
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          statusDiv.className = 'status success';
+          statusDiv.innerHTML = `
+            ✅ <strong>Success!</strong><br/>
+            Deleted ${result.deleted} recipes<br/>
+            <br/>
+            <a href="https://meal-planner-pied-iota.vercel.app/recipes" style="color: #10B981; text-decoration: underline;">View empty recipe library →</a>
+          `;
+        } else {
+          throw new Error(result.error || 'Delete failed');
+        }
+      } catch (error) {
+        statusDiv.className = 'status error';
+        statusDiv.innerHTML = `❌ <strong>Error:</strong> ${error.message}`;
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

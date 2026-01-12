@@ -8,28 +8,53 @@ router.post('/recipe', (req, res) => {
   try {
     const data = req.body;
 
-    // Transform Make.com format to database format
-    const recipe = {
-      recipe_name: data['Recipe Name'],
-      ingredients: JSON.stringify(
-        data.Ingredients ? data.Ingredients.split('\n').filter(i => i.trim()) : []
-      ),
-      instructions: data.Instructions || '',
-      tags: JSON.stringify(
-        data.Tags ? data.Tags.split('\n').filter(t => t.trim()) : []
-      ),
-      main_ingredients: JSON.stringify(
-        data['Main Ingredients'] ? data['Main Ingredients'].split('\n').filter(i => i.trim()) : []
-      ),
-      cook_time: data['Cook Time'] || null,
-      servings: data.Servings || null,
-      rating: data.Rating ? parseInt(data.Rating) : null,
-      leftover_score: data['Leftover Score'] || null,
-      notes: data.Notes || null,
-      source_url: data['Source URL'] || null,
-      image_url: data['Image URL'] || null,
-      meal: data.Meal || null
+    // Helper to get value from multiple possible field names
+    const getValue = (...keys) => {
+      for (const key of keys) {
+        if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+          return data[key];
+        }
+      }
+      return null;
     };
+
+    // Helper to parse list values (handles both strings and arrays)
+    const parseList = (...keys) => {
+      const value = getValue(...keys);
+      if (!value) return JSON.stringify([]);
+      if (Array.isArray(value)) return JSON.stringify(value);
+      if (typeof value === 'string') {
+        return JSON.stringify(value.split('\n').filter(i => i.trim()));
+      }
+      return JSON.stringify([]);
+    };
+
+    // Transform Make.com format to database format (try multiple field name variations)
+    const recipe = {
+      recipe_name: getValue('Recipe Name', 'recipeName', 'recipe_name', 'name', 'Name'),
+      ingredients: parseList('Ingredients', 'ingredients'),
+      instructions: getValue('Instructions', 'instructions') || '',
+      tags: parseList('Tags', 'tags'),
+      main_ingredients: parseList('Main Ingredients', 'mainIngredients', 'main_ingredients'),
+      cook_time: getValue('Cook Time', 'cookTime', 'cook_time'),
+      servings: getValue('Servings', 'servings'),
+      rating: getValue('Rating', 'rating', 'Stars', 'stars') ? parseInt(getValue('Rating', 'rating', 'Stars', 'stars')) : null,
+      leftover_score: getValue('Leftover Score', 'leftoverScore', 'leftover_score', 'Leftover Friendly'),
+      notes: getValue('Notes', 'notes'),
+      source_url: getValue('Source URL', 'sourceUrl', 'source_url', 'url'),
+      image_url: getValue('Image URL', 'imageUrl', 'image_url', 'image'),
+      meal: getValue('Meal', 'meal')
+    };
+
+    // Validate required fields
+    if (!recipe.recipe_name) {
+      console.error('Missing recipe name. Received data:', JSON.stringify(data, null, 2));
+      return res.status(400).json({
+        success: false,
+        error: 'Recipe name is required',
+        received_fields: Object.keys(data)
+      });
+    }
 
     // Insert into database
     const stmt = db.prepare(`
