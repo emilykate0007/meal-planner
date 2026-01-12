@@ -4,6 +4,7 @@ import webhookRouter from './routes/webhook.js';
 import recipesRouter from './routes/recipes.js';
 import mealPlansRouter from './routes/mealPlans.js';
 import groceryListsRouter from './routes/groceryLists.js';
+import importRouter from './routes/import.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -23,6 +24,7 @@ app.use('/api/webhook', webhookRouter);
 app.use('/api/recipes', recipesRouter);
 app.use('/api/meal-plans', mealPlansRouter);
 app.use('/api/grocery-lists', groceryListsRouter);
+app.use('/api/import', importRouter);
 
 // Health check
 app.get('/health', (req, res) => {
