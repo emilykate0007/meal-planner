@@ -239,12 +239,18 @@
 
         const result = await response.json();
 
+        if (!response.ok) {
+          console.error('Server error:', result);
+          throw new Error(result.message || result.error || 'Import failed');
+        }
+
         if (result.success) {
           statusDiv.className = 'status success';
           statusDiv.innerHTML = `
             ✅ <strong>Import Complete!</strong><br/>
             Imported: ${result.imported} recipes<br/>
             ${result.skipped > 0 ? `Skipped: ${result.skipped} recipes<br/>` : ''}
+            ${result.errors ? `<br/>Errors:<br/>${result.errors.map(e => `- ${e.recipe}: ${e.error}`).join('<br/>')}` : ''}
             <br/>
             <a href="https://meal-planner-pied-iota.vercel.app/recipes" style="color: #10B981; text-decoration: underline;">View recipes in app →</a>
           `;
@@ -252,8 +258,13 @@
           throw new Error(result.error || 'Import failed');
         }
       } catch (error) {
+        console.error('Import error:', error);
         statusDiv.className = 'status error';
-        statusDiv.innerHTML = `❌ <strong>Error:</strong> ${error.message}`;
+        statusDiv.innerHTML = `
+          ❌ <strong>Error:</strong> ${error.message}<br/>
+          <br/>
+          Check the browser console (F12) for more details.
+        `;
       } finally {
         btn.disabled = false;
       }
