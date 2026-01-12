@@ -3,6 +3,28 @@ import db from '../db/database.js';
 
 const router = express.Router();
 
+// Delete all recipes
+router.delete('/recipes/all', (req, res) => {
+  try {
+    const deleteRecipes = db.prepare('DELETE FROM recipes');
+    const result = deleteRecipes.run();
+
+    console.log(`Deleted ${result.changes} recipes`);
+
+    res.json({
+      success: true,
+      deleted: result.changes,
+      message: 'All recipes deleted'
+    });
+  } catch (error) {
+    console.error('Delete all error:', error);
+    res.status(500).json({
+      error: 'Failed to delete recipes',
+      message: error.message
+    });
+  }
+});
+
 // Bulk import recipes
 router.post('/recipes/bulk', (req, res) => {
   try {
