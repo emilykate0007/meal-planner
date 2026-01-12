@@ -6,11 +6,15 @@ const router = express.Router();
 // Bulk import recipes
 router.post('/recipes/bulk', (req, res) => {
   try {
+    console.log('Import request received');
     const { recipes } = req.body;
 
     if (!Array.isArray(recipes)) {
+      console.error('recipes is not an array:', typeof recipes);
       return res.status(400).json({ error: 'recipes must be an array' });
     }
+
+    console.log(`Processing ${recipes.length} recipes`);
 
     const insertStmt = db.prepare(`
       INSERT INTO recipes (
@@ -79,6 +83,7 @@ router.post('/recipes/bulk', (req, res) => {
 
         imported++;
       } catch (error) {
+        console.error('Error processing recipe:', recipe, error);
         skipped++;
         errors.push({
           recipe: recipe.recipe_name || recipe['Recipe Name'] || 'unknown',
@@ -86,6 +91,8 @@ router.post('/recipes/bulk', (req, res) => {
         });
       }
     }
+
+    console.log(`Import complete: ${imported} imported, ${skipped} skipped`);
 
     res.json({
       success: true,
@@ -95,7 +102,12 @@ router.post('/recipes/bulk', (req, res) => {
     });
   } catch (error) {
     console.error('Bulk import error:', error);
-    res.status(500).json({ error: 'Failed to import recipes', message: error.message });
+    console.error('Stack:', error.stack);
+    res.status(500).json({
+      error: 'Failed to import recipes',
+      message: error.message,
+      stack: process.env.NODE_ENV === 'production' ? undefined : error.stack
+    });
   }
 });
 
