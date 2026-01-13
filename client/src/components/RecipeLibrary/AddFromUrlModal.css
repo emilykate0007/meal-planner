@@ -1,0 +1,100 @@
+.add-url-modal {
+  max-width: 550px;
+}
+
+.add-url-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--gray-800);
+  font-size: 0.95rem;
+}
+
+.form-group input[type="url"],
+.form-group input[type="password"] {
+  padding: 0.875rem 1.25rem;
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: rgba(26, 31, 58, 0.6);
+  backdrop-filter: blur(8px);
+  color: var(--gray-800);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+  background: rgba(26, 31, 58, 0.8);
+}
+
+.form-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-group input::placeholder {
+  color: var(--gray-500);
+}
+
+.form-hint {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  margin-top: -0.25rem;
+}
+
+.form-hint a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-hint a:hover {
+  text-decoration: underline;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  cursor: pointer;
+  margin-top: var(--space-xs);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-label span {
+  user-select: none;
+}
+
+.error-message {
+  padding: var(--space-md);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  color: #EF4444;
+  font-size: 0.9rem;
+}
+
+.error-message strong {
+  font-weight: 700;
+}

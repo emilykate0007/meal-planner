@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useRecipes } from '../../hooks/useRecipes';
 import RecipeCard from './RecipeCard';
+import AddFromUrlModal from './AddFromUrlModal';
 import './RecipeLibrary.css';
 
 export default function RecipeLibrary() {
   const [search, setSearch] = useState('');
   const [meal, setMeal] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [showAddUrlModal, setShowAddUrlModal] = useState(false);
 
-  const { recipes, loading, error, updateRecipe, deleteRecipe } = useRecipes({
+  const { recipes, loading, error, updateRecipe, deleteRecipe, refetch } = useRecipes({
     search: debouncedSearch,
     meal,
   });
@@ -25,10 +27,22 @@ export default function RecipeLibrary() {
     return <div className="error-message">Error: {error}</div>;
   }
 
+  const handleAddFromUrl = (recipe) => {
+    refetch();
+  };
+
   return (
     <div className="recipe-library">
       <div className="library-header">
-        <h2>Recipe Library</h2>
+        <div className="header-top">
+          <h2>Recipe Library</h2>
+          <button
+            className="btn-primary add-url-btn"
+            onClick={() => setShowAddUrlModal(true)}
+          >
+            ➕ Add from URL
+          </button>
+        </div>
         <div className="filters">
           <input
             type="text"
@@ -49,6 +63,12 @@ export default function RecipeLibrary() {
           </select>
         </div>
       </div>
+
+      <AddFromUrlModal
+        isOpen={showAddUrlModal}
+        onClose={() => setShowAddUrlModal(false)}
+        onSuccess={handleAddFromUrl}
+      />
 
       {loading ? (
         <div className="loading">Loading recipes...</div>

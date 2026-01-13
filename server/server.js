@@ -5,6 +5,7 @@ import recipesRouter from './routes/recipes.js';
 import mealPlansRouter from './routes/mealPlans.js';
 import groceryListsRouter from './routes/groceryLists.js';
 import importRouter from './routes/import.js';
+import parseRecipeRouter from './routes/parseRecipe.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/webhook', webhookRouter);
+app.use('/api/recipes', parseRecipeRouter); // Must come before recipesRouter for /from-url route
 app.use('/api/recipes', recipesRouter);
 app.use('/api/meal-plans', mealPlansRouter);
 app.use('/api/grocery-lists', groceryListsRouter);

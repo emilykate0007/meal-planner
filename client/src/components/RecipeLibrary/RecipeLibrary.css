@@ -11,8 +11,17 @@
   margin-bottom: var(--space-2xl);
 }
 
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
 .library-header h2 {
-  margin: 0 0 var(--space-lg) 0;
+  margin: 0;
   color: var(--gray-900);
   font-size: 2.5rem;
   font-weight: 700;
@@ -21,6 +30,11 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.add-url-btn {
+  white-space: nowrap;
+  font-size: 0.95rem;
 }
 
 .filters {
